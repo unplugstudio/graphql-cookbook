@@ -9,6 +9,7 @@ class RecipeElementNode(DjangoObjectType):
 
     class Meta:
         model = RecipeElement
+        exclude_fields = ['recipe']
 
     def resolve_unit_display(self, info, **kwargs):
         return self.get_unit_display()
