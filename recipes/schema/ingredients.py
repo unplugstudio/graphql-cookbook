@@ -1,6 +1,7 @@
 import django_filters
 import graphene
 
+from graphql import GraphQLError
 from graphene import relay
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
@@ -60,6 +61,9 @@ class AddIngredientMutation(relay.ClientIDMutation):
         category_id = input.get('category')
 
         category = relay.Node.get_node_from_global_id(info, category_id)
+        if category is None:
+            raise GraphQLError('Category does not exist!')
+
         ingredient = Ingredient.objects.create(name=name, notes=notes, category=category)
         return cls(ingredient=ingredient)
 
