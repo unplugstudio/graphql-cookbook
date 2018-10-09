@@ -1,7 +1,13 @@
 import graphene
 from graphene_django.types import DjangoObjectType
 
-from ..models import Recipe
+from ..models import Recipe, RecipeElement
+
+
+class RecipeElementNode(DjangoObjectType):
+
+    class Meta:
+        model = RecipeElement
 
 
 class RecipeNode(DjangoObjectType):
