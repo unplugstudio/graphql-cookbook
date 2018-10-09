@@ -19,10 +19,13 @@ class IngredientNode(DjangoObjectType):
 
 class IngredientQuery(object):
     all_categories = graphene.List(CategoryNode)
-    all_ingredients = graphene.List(IngredientNode)
+    all_ingredients = graphene.List(IngredientNode, category=graphene.String())
 
     def resolve_all_categories(self, info, **kwargs):
         return Category.objects.all()
 
     def resolve_all_ingredients(self, info, **kwargs):
-        return Ingredient.objects.all()
+        category = kwargs.get('category')
+        if category is None:
+            return Ingredient.objects.all()
+        return Ingredient.objects.filter(category__name=category)
