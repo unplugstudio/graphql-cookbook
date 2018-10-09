@@ -1,7 +1,7 @@
 import graphene
 
 from recipes.schema.ingredients import IngredientQuery, IngredientMutation
-from recipes.schema.recipes import RecipeQuery
+from recipes.schema.recipes import RecipeQuery, RecipeMutation
 
 
 class Query(IngredientQuery, RecipeQuery, graphene.ObjectType):
@@ -14,7 +14,7 @@ class Query(IngredientQuery, RecipeQuery, graphene.ObjectType):
         return "Hello stranger"
 
 
-class Mutation(IngredientMutation, graphene.ObjectType):
+class Mutation(IngredientMutation, RecipeMutation, graphene.ObjectType):
     pass
 
 
