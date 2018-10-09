@@ -1,7 +1,9 @@
 import graphene
 
+from recipes.schema.recipes import RecipeQuery
 
-class Query(graphene.ObjectType):
+
+class Query(RecipeQuery, graphene.ObjectType):
     hello = graphene.Field(graphene.String)
 
     def resolve_hello(self, info, **kwargs):
