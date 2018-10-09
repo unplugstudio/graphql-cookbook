@@ -1,4 +1,5 @@
 import django_filters
+import graphene
 
 from graphene import relay
 from graphene_django.filter import DjangoFilterConnectionField
@@ -39,3 +40,29 @@ class IngredientQuery(object):
     all_categories = DjangoFilterConnectionField(CategoryNode)
     all_ingredients = DjangoFilterConnectionField(
         IngredientNode, filterset_class=IngredientFilterSet)
+
+
+# Mutations
+
+class AddIngredientMutation(relay.ClientIDMutation):
+
+    class Input:
+        name = graphene.String(required=True)
+        notes = graphene.String()
+        category = graphene.ID(required=True)
+
+    ingredient = graphene.Field(IngredientNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        name = input.get('name')
+        notes = input.get('notes', '')
+        category_id = input.get('category')
+
+        category = relay.Node.get_node_from_global_id(info, category_id)
+        ingredient = Ingredient.objects.create(name=name, notes=notes, category=category)
+        return cls(ingredient=ingredient)
+
+
+class IngredientMutation(object):
+    add_ingredient = AddIngredientMutation.Field()
