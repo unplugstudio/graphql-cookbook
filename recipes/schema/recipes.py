@@ -1,4 +1,7 @@
 import graphene
+
+from graphene import relay
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 
 from ..models import Recipe, RecipeElement
@@ -10,6 +13,7 @@ class RecipeElementNode(DjangoObjectType):
     class Meta:
         model = RecipeElement
         exclude_fields = ['recipe']
+        interfaces = [relay.Node]
 
     def resolve_unit_display(self, info, **kwargs):
         return self.get_unit_display()
@@ -19,18 +23,10 @@ class RecipeNode(DjangoObjectType):
 
     class Meta:
         model = Recipe
+        interfaces = [relay.Node]
+        filter_fields = []
 
 
 class RecipeQuery(object):
-    recipe = graphene.Field(RecipeNode, id=graphene.Int(required=True))
-    all_recipes = graphene.List(RecipeNode)
-
-    def resolve_recipe(self, info, **kwargs):
-        id = kwargs.get('id')
-        try:
-            return Recipe.objects.get(pk=id)
-        except (Recipe.DoesNotExist):
-            return None
-
-    def resolve_all_recipes(self, info, **kwargs):
-        return Recipe.objects.all()
+    recipe = relay.Node.Field(RecipeNode)
+    all_recipes = DjangoFilterConnectionField(RecipeNode)
