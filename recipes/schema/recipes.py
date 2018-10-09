@@ -5,9 +5,13 @@ from ..models import Recipe, RecipeElement
 
 
 class RecipeElementNode(DjangoObjectType):
+    unit_display = graphene.String()
 
     class Meta:
         model = RecipeElement
+
+    def resolve_unit_display(self, info, **kwargs):
+        return self.get_unit_display()
 
 
 class RecipeNode(DjangoObjectType):
