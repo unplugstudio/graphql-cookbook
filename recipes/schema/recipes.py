@@ -37,6 +37,12 @@ class RecipeQuery(object):
 
 # Mutations
 
+class RecipeElementInput(graphene.InputObjectType):
+    ingredient = graphene.ID(required=True)
+    amount = graphene.Float(required=True)
+    unit = RecipeElementNode._meta.fields['unit']
+
+
 class UpdateRecipeMutation(relay.ClientIDMutation):
 
     class Input:
@@ -44,8 +50,23 @@ class UpdateRecipeMutation(relay.ClientIDMutation):
         title = graphene.String()
         instructions = graphene.String()
         featured = graphene.Boolean()
+        elements = graphene.List(RecipeElementInput)
 
     recipe = graphene.Field(RecipeNode)
+
+    @staticmethod
+    def set_elements(info, recipe, elements):
+        updates = []
+        recipe.elements.all().delete()
+        for element in elements:
+            ingredient = relay.Node.get_node_from_global_id(info, element['ingredient'])
+            updates.append(RecipeElement(
+                recipe=recipe,
+                ingredient=ingredient,
+                amount=element['amount'],
+                unit=element['unit']
+            ))
+        RecipeElement.objects.bulk_create(updates)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
@@ -53,6 +74,9 @@ class UpdateRecipeMutation(relay.ClientIDMutation):
         recipe = relay.Node.get_node_from_global_id(info, id)
         if recipe is None:
             raise GraphQLError('Recipe does not exist')
+
+        elements = input.pop('elements', [])
+        cls.set_elements(info, recipe, elements)
 
         for k, v in input.items():
             setattr(recipe, k, v)
