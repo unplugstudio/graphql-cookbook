@@ -2,6 +2,23 @@
 
 This repository contains the code samples to build your own GraphQL API using the Django web framework and the Graphene library for Python. It is intended to be accompanied by a presentation (originally prepared for DjangoCon US 2018).
 
+## Slides
+
+The slides are available here: https://keen-mayer-abfbee.netlify.com/
+
+You can move across top-level sections using the left/right keys. On each top-level section you can use the up/down keys to drill into the content. Press `Esc` to go into overview mode.
+
+## Using diffs to follow along
+
+You can use the git's diff to see exactly what has changed from one step to the other (including which files have been modified and exactly which lines have been added or removed). GitHub includes an online diff viewer accessible right from the browser. To use it:
+
+1. Go to the [**Releases**](https://github.com/unplugstudio/graphql-cookbook/releases) tab in the repository homepage.
+1. Scroll to find the step you want to examine, for example `step-10`.
+1. Right below the step you'll see the commit identifier (a string of letters and numbers like `67266fe`). Click it.
+1. You should now be in GitHub's diff viewer. Lines of code with a green background indicate additions, and a red background indicates deletions.
+
+At this point you can manually reproduce the steps in your local copy of the repository, or you can checkout each particular step with: `git checkout step-10` (and so forth). This command will apply the changes for a particular step on your codebase so you can be in sync with the slides.
+
 ## Requirements
 
 We assume you're comfortable with Python and Django. You should also be familiar with the usage of pip and how to install packages in your Python environment.
