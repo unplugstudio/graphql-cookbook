@@ -12,7 +12,7 @@ The code and all directions were written for Python 3. It may work with Python 2
 
 ```bash
 # Create a Python 3 virtual environment, then...
-pip install requirements.txt
+pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py loaddata demo.json
